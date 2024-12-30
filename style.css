@@ -1,0 +1,29 @@
+table{
+    width:100%;
+    border-collapse: collapse;
+    text-align: center;
+}
+
+th,td {
+    border: 1px solid black;
+    padding: 8px;
+}
+
+thead{
+    background-color: lightblue;
+}
+
+tbody tr:nth-child(odd){
+    background-color: blue;
+}
+
+tbody tr:nth-child(even){
+    background-color: lightgray;
+}
+
+.error-message{
+    color:red;
+    border: 1px solid red;
+    padding: 5px;
+    margin-top: 5px;
+}
