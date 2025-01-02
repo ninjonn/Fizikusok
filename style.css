@@ -23,7 +23,4 @@ tbody tr:nth-child(even){
 
 .error-message{
     color:red;
-    border: 1px solid red;
-    padding: 5px;
-    margin-top: 5px;
 }

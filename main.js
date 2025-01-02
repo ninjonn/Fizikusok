@@ -108,19 +108,51 @@ form.addEventListener('submit', function (e) { // Hozzáad egy eseménykezelőt,
     const elsotudosHtmlElement = document.getElementById('tudos1') // Megkeresi a `tudos1` azonosítójú HTML elemet.
     const masodiktudosHtmlElement = document.getElementById('tudos2') // Megkeresi a `tudos2` azonosítójú HTML elemet.
 
+    const urlap = e.currentTarget; 
+    const errors = urlap.querySelectorAll('.error-message'); // Kiválasztjuk az összes HTML elemet, amelyek az "error-message" osztállyal rendelkeznek, a formon belül.
+    for(const error of errors){ // Végigiterálunk az összes talált error-message elemen.
+        error.innerHTML = ''; // Töröljük a hibák szövegét, hogy ne jelenjenek meg korábbi hibák.
+    }
+
     const teruletmegnevezeseValue = teruletmegnevezeseHtmlElement.value // Lekéri a `fizika` mező értékét.
     const idoszakValue = idoszakHtmlElement.value // Lekéri az `ido` mező értékét.
     const elsotudosValue = elsotudosHtmlElement.value // Lekéri a `tudos1` mező értékét.
     const masodiktudosValue = masodiktudosHtmlElement.value // Lekéri a `tudos2` mező értékét.
 
-    const newElement = { // Létrehoz egy új objektumot az űrlap mezőinek értékeivel.
-        field1: teruletmegnevezeseValue, // Az objektum `field1` mezőjéhez az `fizika` mező értéke kerül.
-        field2: idoszakValue, // Az objektum `field2` mezőjéhez az `ido` mező értéke kerül.
-        field3: elsotudosValue, // Az objektum `field3` mezőjéhez a `tudos1` mező értéke kerül.
-        field4: masodiktudosValue // Az objektum `field4` mezőjéhez a `tudos2` mező értéke kerül.
+    let valid = true; // A valid változót alapértelmezetten igazra állítjuk, majd később ennek az értékét hamisra módosítjuk, ha hiba történik.
+
+    if (teruletmegnevezeseValue === '') { // Ha a 'fizika' mező üres
+        const szuloElem = teruletmegnevezeseHtmlElement.parentElement; // Elmentjük a mező szülő elemét, amely tartalmazza a hibajelzést.
+        const errorMessage = szuloElem.querySelector('.error-message'); // Megkeressük a szülő elemében azt a HTML elemet, amely az "error-message" osztállyal rendelkezik
+        if(errorMessage != undefined) { // Ha létezik ilyen hibaüzenet elem.
+            errorMessage.innerHTML = 'A terület kitöltése kötelező!'; // Hibaüzenet szövegének beállítása
+        }
+        valid = false; // Beállítjuk, hogy a valid változó hamis, mert a mező üres maradt
     }
 
-    array.push(newElement); // Hozzáadja az új elemet az array végére
-    table.innerHTML = ''; // Kiüríti a táblázat tartalmát
-    renderTable(); // Frissíti a táblázatot
+    if (idoszakValue === '') { // Ha az 'ido' mező üres
+        const szuloEleme = idoszakHtmlElement.parentElement; // Elmentjük a mező szülő elemét, amely tartalmazza a hibajelzést
+        const hibauzenet = szuloEleme.querySelector('.error-message'); // Megkeressük a szülő elemében azt a HTML elemet, amely az "error-message" osztállyal rendelkezik
+        if(hibauzenet != undefined) { // Ha létezik ilyen hibaüzenet elem.
+            hibauzenet.innerHTML = 'Az időszak kitöltése kötelező!'; // Hibaüzenet szövegének beállítása
+            
+        }
+        valid = false; // Beállítjuk, hogy a valid változó hamis, mert a mező üres maradt
+    }
+    
+
+    if (valid) {
+        const newElement = { // Létrehoz egy új objektumot az űrlap mezőinek értékeivel.
+            field1: teruletmegnevezeseValue, // Az objektum `field1` mezőjéhez az `fizika` mező értéke kerül.
+            field2: idoszakValue, // Az objektum `field2` mezőjéhez az `ido` mező értéke kerül.
+            field3: elsotudosValue, // Az objektum `field3` mezőjéhez a `tudos1` mező értéke kerül.
+            field4: masodiktudosValue // Az objektum `field4` mezőjéhez a `tudos2` mező értéke kerül.
+        }
+
+        array.push(newElement); // Hozzáadja az új elemet az array végére
+        table.innerHTML = ''; // Kiüríti a táblázat tartalmát
+        renderTable(); // Frissíti a táblázatot
+    }
+
+    
 })
