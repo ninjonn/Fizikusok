@@ -37,7 +37,7 @@ const table = document.createElement('table'); // Táblázat HTML elem létrehoz
 document.body.appendChild(table); // Hozzáadjuk a táblázatot a dokumentum törzséhez (body)
 
 function renderTable() { // Definiálom a renderTable függvényt
-
+    table.innerHTML = '';
 
     const tableHeader = document.createElement('thead'); // Táblázat fejléc elem létrehozása
     table.appendChild(tableHeader); // A fejléc (thead) hozzáadása a táblázathoz (table)
@@ -81,18 +81,24 @@ function renderTable() { // Definiálom a renderTable függvényt
         rowidoszak.innerHTML = currentElement.field2; // Beállítja a cella tartalmát az aktuális objektum "field2" mezőjére.
         row.appendChild(rowidoszak); // Hozzáadja a cellát az aktuális táblázatsorhoz.
 
-        const rowkepviselok1 = document.createElement('td'); // Létrehoz egy új cellát (<td>) az aktuális sor "field3" adatának tárolására.
-        rowkepviselok1.innerHTML = currentElement.field3; // Beállítja a cella tartalmát az aktuális objektum "field3" mezőjére.
-
-        if (!currentElement.field4) { // Ellenőrzi, hogy az aktuális objektumban van-e "field4".
+        if (currentElement.field3 && !currentElement.field4) { // Ellenőrzi, hogy az aktuális objektumban van-e "field4".
+            const rowkepviselok1 = document.createElement('td'); // Létrehoz egy új cellát (<td>) az aktuális sor "field3" adatának tárolására.
+            rowkepviselok1.innerHTML = currentElement.field3; // Beállítja a cella tartalmát az aktuális objektum "field3" mezőjére.
             rowkepviselok1.colSpan = 2; // Ha nincs "field4", az első "Képviselők" cella két oszlopot foglal el.
             row.appendChild(rowkepviselok1); // Hozzáadja a cellát az aktuális táblázatsorhoz.
-        } else {  // Ha van "field4", külön cellát készítünk hozzá.
-            row.appendChild(rowkepviselok1); // Hozzáadja az első "Képviselők" cellát az aktuális táblázatsorhoz.
+        } else if (!currentElement.field3 && currentElement.field4) {
+            const rowkepviselok2 = document.createElement('td'); // Létrehoz egy új cellát (<td>) az aktuális sor "field4" adatának tárolására.
+            rowkepviselok2.innerHTML = currentElement.field4; // Beállítja a cella tartalmát az aktuális objektum "field4" mezőjére.
+            rowkepviselok2.colSpan = 2; // Ha nincs "field3",
+            row.appendChild(rowkepviselok2); // Hozzáadja a cellát az aktuális táblázatsorhoz.
+        } else if(currentElement.field3 && currentElement.field4) {
+            const rowkepviselok1 = document.createElement('td'); // Létrehoz egy új cellát (<td>) az aktuális sor "field3" adatának tárolására.
+            rowkepviselok1.innerHTML = currentElement.field3; // Beállítja a cella tartalmát az aktuális objektum "field3" mezőjére.
+            row.appendChild(rowkepviselok1)
 
             const rowkepviselok2 = document.createElement('td'); // Létrehoz egy új cellát (<td>) az aktuális sor "field4" adatának tárolására.
             rowkepviselok2.innerHTML = currentElement.field4; // Beállítja a cella tartalmát az aktuális objektum "field4" mezőjére.
-            row.appendChild(rowkepviselok2); // Hozzáadja a cellát az aktuális táblázatsorhoz.
+            row.appendChild(rowkepviselok2)
         }
     }
 }
@@ -108,9 +114,9 @@ form.addEventListener('submit', function (e) { // Hozzáad egy eseménykezelőt,
     const elsotudosHtmlElement = document.getElementById('tudos1') // Megkeresi a `tudos1` azonosítójú HTML elemet.
     const masodiktudosHtmlElement = document.getElementById('tudos2') // Megkeresi a `tudos2` azonosítójú HTML elemet.
 
-    const urlap = e.currentTarget; 
+    const urlap = e.currentTarget;
     const errors = urlap.querySelectorAll('.error-message'); // Kiválasztjuk az összes HTML elemet, amelyek az "error-message" osztállyal rendelkeznek, a formon belül.
-    for(const error of errors){ // Végigiterálunk az összes talált error-message elemen.
+    for (const error of errors) { // Végigiterálunk az összes talált error-message elemen.
         error.innerHTML = ''; // Töröljük a hibák szövegét, hogy ne jelenjenek meg korábbi hibák.
     }
 
@@ -124,7 +130,7 @@ form.addEventListener('submit', function (e) { // Hozzáad egy eseménykezelőt,
     if (teruletmegnevezeseValue === '') { // Ha a 'fizika' mező üres
         const szuloElem = teruletmegnevezeseHtmlElement.parentElement; // Elmentjük a mező szülő elemét, amely tartalmazza a hibajelzést.
         const errorMessage = szuloElem.querySelector('.error-message'); // Megkeressük a szülő elemében azt a HTML elemet, amely az "error-message" osztállyal rendelkezik
-        if(errorMessage != undefined) { // Ha létezik ilyen hibaüzenet elem.
+        if (errorMessage != undefined) { // Ha létezik ilyen hibaüzenet elem.
             errorMessage.innerHTML = 'A terület kitöltése kötelező!'; // Hibaüzenet szövegének beállítása
         }
         valid = false; // Beállítjuk, hogy a valid változó hamis, mert a mező üres maradt
@@ -133,13 +139,25 @@ form.addEventListener('submit', function (e) { // Hozzáad egy eseménykezelőt,
     if (idoszakValue === '') { // Ha az 'ido' mező üres
         const szuloEleme = idoszakHtmlElement.parentElement; // Elmentjük a mező szülő elemét, amely tartalmazza a hibajelzést
         const hibauzenet = szuloEleme.querySelector('.error-message'); // Megkeressük a szülő elemében azt a HTML elemet, amely az "error-message" osztállyal rendelkezik
-        if(hibauzenet != undefined) { // Ha létezik ilyen hibaüzenet elem.
+        if (hibauzenet != undefined) { // Ha létezik ilyen hibaüzenet elem.
             hibauzenet.innerHTML = 'Az időszak kitöltése kötelező!'; // Hibaüzenet szövegének beállítása
-            
+
         }
         valid = false; // Beállítjuk, hogy a valid változó hamis, mert a mező üres maradt
     }
-    
+
+    if (elsotudosValue === '' && masodiktudosValue === '') {
+        const szuloEleme1 = elsotudosHtmlElement.parentElement; // Elmentjük a mező szülő elemét, amely tartalmazza a hibajelzést
+        const szuloEleme2 = masodiktudosHtmlElement.parentElement; // Elmentjük a mező szülő elemét, amely tartalmazza a hibajelzést
+        const error1 = szuloEleme1.querySelector('.error-message');
+        const error2 = szuloEleme2.querySelector('.error-message');
+        if (error1 != undefined && error2 != undefined) {
+            error1.innerHTML = 'Legalább egy tudóst meg kell adni!';
+            error2.innerHTML = 'Legalább egy tudóst meg kell adni!';
+        }
+        valid = false;
+    }
+
 
     if (valid) {
         const newElement = { // Létrehoz egy új objektumot az űrlap mezőinek értékeivel.
@@ -154,5 +172,5 @@ form.addEventListener('submit', function (e) { // Hozzáad egy eseménykezelőt,
         renderTable(); // Frissíti a táblázatot
     }
 
-    
+
 })
