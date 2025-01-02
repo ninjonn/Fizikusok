@@ -96,3 +96,31 @@ function renderTable() { // Definiálom a renderTable függvényt
         }
     }
 }
+
+renderTable(); // A renderTable() függvény hívása a rendereléshez.
+
+const form = document.getElementById('form'); // Megkeresi az `form` azonosítójú HTML elemet.
+
+form.addEventListener('submit', function (e) { // Hozzáad egy eseménykezelőt, amely a form elküldésekor fut le.
+    e.preventDefault(); // Eltávolítja a form default értesítőjét
+    const teruletmegnevezeseHtmlElement = document.getElementById('fizika') // Megkeresi a `fizika` azonosítójú HTML elemet.
+    const idoszakHtmlElement = document.getElementById('ido') // Megkeresi az `ido` azonosítójú HTML elemet.
+    const elsotudosHtmlElement = document.getElementById('tudos1') // Megkeresi a `tudos1` azonosítójú HTML elemet.
+    const masodiktudosHtmlElement = document.getElementById('tudos2') // Megkeresi a `tudos2` azonosítójú HTML elemet.
+
+    const teruletmegnevezeseValue = teruletmegnevezeseHtmlElement.value // Lekéri a `fizika` mező értékét.
+    const idoszakValue = idoszakHtmlElement.value // Lekéri az `ido` mező értékét.
+    const elsotudosValue = elsotudosHtmlElement.value // Lekéri a `tudos1` mező értékét.
+    const masodiktudosValue = masodiktudosHtmlElement.value // Lekéri a `tudos2` mező értékét.
+
+    const newElement = { // Létrehoz egy új objektumot az űrlap mezőinek értékeivel.
+        field1: teruletmegnevezeseValue, // Az objektum `field1` mezőjéhez az `fizika` mező értéke kerül.
+        field2: idoszakValue, // Az objektum `field2` mezőjéhez az `ido` mező értéke kerül.
+        field3: elsotudosValue, // Az objektum `field3` mezőjéhez a `tudos1` mező értéke kerül.
+        field4: masodiktudosValue // Az objektum `field4` mezőjéhez a `tudos2` mező értéke kerül.
+    }
+
+    array.push(newElement); // Hozzáadja az új elemet az array végére
+    table.innerHTML = ''; // Kiüríti a táblázat tartalmát
+    renderTable(); // Frissíti a táblázatot
+})
