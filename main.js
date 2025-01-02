@@ -33,9 +33,11 @@ const array = [
     }
 ];
 
+const table = document.createElement('table'); // Táblázat HTML elem létrehozása
+document.body.appendChild(table); // Hozzáadjuk a táblázatot a dokumentum törzséhez (body)
+
 function renderTable() { // Definiálom a renderTable függvényt
-    const table = document.createElement('table'); // Táblázat HTML elem létrehozása
-    document.body.appendChild(table); // Hozzáadjuk a táblázatot a dokumentum törzséhez (body)
+
 
     const tableHeader = document.createElement('thead'); // Táblázat fejléc elem létrehozása
     table.appendChild(tableHeader); // A fejléc (thead) hozzáadása a táblázathoz (table)
@@ -94,5 +96,3 @@ function renderTable() { // Definiálom a renderTable függvényt
         }
     }
 }
-
-renderTable(); // A renderTable() függvény hívása a rendereléshez.
