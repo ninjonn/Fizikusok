@@ -69,7 +69,6 @@ function renderTable() { // Definiálom a renderTable függvényt
             continue; // Továbblép a következő iterációra, mert létrehoztuk a fejlécet
         }
 
-
         const row = document.createElement('tr'); // Létrehoz egy új táblázatsort (<tr> elemet).
         tableBody.appendChild(row); // Hozzáadja az új sort a táblázat törzséhez (tbody).
 
@@ -81,28 +80,27 @@ function renderTable() { // Definiálom a renderTable függvényt
         rowidoszak.innerHTML = currentElement.field2; // Beállítja a cella tartalmát az aktuális objektum "field2" mezőjére.
         row.appendChild(rowidoszak); // Hozzáadja a cellát az aktuális táblázatsorhoz.
 
-        if (currentElement.field3 && !currentElement.field4) { // Ellenőrzi, hogy az aktuális objektumban van-e "field4".
+        if (currentElement.field3 && !currentElement.field4) { // Ellenőrzi, hogy az aktuális objektumnak van-e "field3" értéke, de nincs "field4" értéke.
             const rowkepviselok1 = document.createElement('td'); // Létrehoz egy új cellát (<td>) az aktuális sor "field3" adatának tárolására.
             rowkepviselok1.innerHTML = currentElement.field3; // Beállítja a cella tartalmát az aktuális objektum "field3" mezőjére.
             rowkepviselok1.colSpan = 2; // Ha nincs "field4", az első "Képviselők" cella két oszlopot foglal el.
             row.appendChild(rowkepviselok1); // Hozzáadja a cellát az aktuális táblázatsorhoz.
-        } else if (!currentElement.field3 && currentElement.field4) {
+        } else if (!currentElement.field3 && currentElement.field4) { // Ellenőrzi, hogy az aktuális objektumnak van-e "field4" értéke, de nincs "field3" értéke.
             const rowkepviselok2 = document.createElement('td'); // Létrehoz egy új cellát (<td>) az aktuális sor "field4" adatának tárolására.
             rowkepviselok2.innerHTML = currentElement.field4; // Beállítja a cella tartalmát az aktuális objektum "field4" mezőjére.
-            rowkepviselok2.colSpan = 2; // Ha nincs "field3",
+            rowkepviselok2.colSpan = 2; // Ha nincs "field3", a második "Képviselők" cella két oszlopot foglal el.
             row.appendChild(rowkepviselok2); // Hozzáadja a cellát az aktuális táblázatsorhoz.
-        } else if(currentElement.field3 && currentElement.field4) {
+        } else if(currentElement.field3 && currentElement.field4) { // Ellenőrzi, hogy az aktuális objektumnak van "field3" és "field4" értéke is.
             const rowkepviselok1 = document.createElement('td'); // Létrehoz egy új cellát (<td>) az aktuális sor "field3" adatának tárolására.
             rowkepviselok1.innerHTML = currentElement.field3; // Beállítja a cella tartalmát az aktuális objektum "field3" mezőjére.
-            row.appendChild(rowkepviselok1)
+            row.appendChild(rowkepviselok1) // Hozzáadja a cellát az aktuális táblázatsorhoz.
 
             const rowkepviselok2 = document.createElement('td'); // Létrehoz egy új cellát (<td>) az aktuális sor "field4" adatának tárolására.
             rowkepviselok2.innerHTML = currentElement.field4; // Beállítja a cella tartalmát az aktuális objektum "field4" mezőjére.
-            row.appendChild(rowkepviselok2)
+            row.appendChild(rowkepviselok2) // Hozzáadja a cellát az aktuális táblázatsorhoz.
         }
     }
 }
-
 renderTable(); // A renderTable() függvény hívása a rendereléshez.
 
 const form = document.getElementById('form'); // Megkeresi az `form` azonosítójú HTML elemet.
@@ -149,15 +147,14 @@ form.addEventListener('submit', function (e) { // Hozzáad egy eseménykezelőt,
     if (elsotudosValue === '' && masodiktudosValue === '') {
         const szuloEleme1 = elsotudosHtmlElement.parentElement; // Elmentjük a mező szülő elemét, amely tartalmazza a hibajelzést
         const szuloEleme2 = masodiktudosHtmlElement.parentElement; // Elmentjük a mező szülő elemét, amely tartalmazza a hibajelzést
-        const error1 = szuloEleme1.querySelector('.error-message');
-        const error2 = szuloEleme2.querySelector('.error-message');
-        if (error1 != undefined && error2 != undefined) {
-            error1.innerHTML = 'Legalább egy tudóst meg kell adni!';
-            error2.innerHTML = 'Legalább egy tudóst meg kell adni!';
+        const error1 = szuloEleme1.querySelector('.error-message'); // A szuloEleme1 elem belsejében keres egy '.error-message' osztályú elemet.
+        const error2 = szuloEleme2.querySelector('.error-message'); // A szuloEleme2 elem belsejében keres egy '.error-message' osztályú elemet.
+        if (error1 != undefined && error2 != undefined) { // Ellenőrzi, hogy mindkét hibaüzenet elem létezik-e
+            error1.innerHTML = 'Legalább egy tudóst meg kell adni!'; // Beállítja az első hibaüzenet elem szövegét
+            error2.innerHTML = 'Legalább egy tudóst meg kell adni!'; // Beállítja a második hibaüzenet elem szövegét
         }
-        valid = false;
+        valid = false; // Beállítjuk, hogy a valid változó hamis, mert a mező üres maradt
     }
-
 
     if (valid) {
         const newElement = { // Létrehoz egy új objektumot az űrlap mezőinek értékeivel.
@@ -171,6 +168,4 @@ form.addEventListener('submit', function (e) { // Hozzáad egy eseménykezelőt,
         table.innerHTML = ''; // Kiüríti a táblázat tartalmát
         renderTable(); // Frissíti a táblázatot
     }
-
-
 })
