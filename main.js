@@ -125,11 +125,11 @@ form.addEventListener('submit', function (e) { // Hozzáad egy eseménykezelőt,
     const elsotudosValue = elsotudosHtmlElement.value // Lekéri a `tudos1` mező értékét.
     const masodiktudosValue = masodiktudosHtmlElement.value // Lekéri a `tudos2` mező értékét.
 
-    let valid = simpleValidation(teruletmegnevezeseHtmlElement,idoszakHtmlElement); // betesszük egy változóba a simpleValidation függvényt
-    valid = complexValidation(elsotudosHtmlElement,masodiktudosHtmlElement) && simpleValidation(teruletmegnevezeseHtmlElement,idoszakHtmlElement); // a valid változó felveszi értékként a complexValidation és a simpleValidation függvényt.
+    let valid = simpleValidation(teruletmegnevezeseHtmlElement,idoszakHtmlElement); // betesszük egy változóba a simpleValidation függvény visszatérési értékét
+    valid = complexValidation(elsotudosHtmlElement,masodiktudosHtmlElement) && simpleValidation(teruletmegnevezeseHtmlElement,idoszakHtmlElement); // a valid változó felveszi értékként a complexValidation és a simpleValidation függvény visszatérési értékét.
     
 
-    if (valid) {
+    if (valid) { // true, ha a field1 és field2 ki van töltve plusz hogyha minimum 1 tudós
         const newElement = { // Létrehoz egy új objektumot az űrlap mezőinek értékeivel.
             field1: teruletmegnevezeseValue, // Az objektum `field1` mezőjéhez az `fizika` mező értéke kerül.
             field2: idoszakValue, // Az objektum `field2` mezőjéhez az `ido` mező értéke kerül.
@@ -142,7 +142,7 @@ form.addEventListener('submit', function (e) { // Hozzáad egy eseménykezelőt,
         urlap.reset(); // Formot alapallálapotba állítja vissza
     }
 })
-function simpleValidation(teruletHtmlElement, idoszakHtmlElement) { // Meghatározza a simple validation-t, amely ellenőrzi, hogy a megadott űrlapelemek ki vannak-e töltve, és biztosítja, hogy legalább egy tudós mező értékkel rendelkezzen.
+function simpleValidation(teruletHtmlElement, idoszakHtmlElement) { // Simple validációs függvény, amely ellenőrzi, hogy ki van e töltve a terület és idő field
     let valid = true; // A valid változót alapértelmezetten igazra állítjuk, majd később ennek az értékét hamisra módosítjuk, ha hiba történik.
 
     if (!validateFormHtmlField(teruletHtmlElement, "A terület kitöltése kötelező")) { // Ellenőrzi, hogy a terulet mező ki van e töltve.
