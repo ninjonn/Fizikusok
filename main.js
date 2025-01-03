@@ -120,13 +120,13 @@ form.addEventListener('submit', function (e) { // Hozzáad egy eseménykezelőt,
         error.innerHTML = ''; // Töröljük a hibák szövegét, hogy ne jelenjenek meg korábbi hibák.
     }
 
-    const teruletmegnevezeseValue = teruletmegnevezeseHtmlElement.value // Lekéri a `fizika` mező értékét.
-    const idoszakValue = idoszakHtmlElement.value // Lekéri az `ido` mező értékét.
-    const elsotudosValue = elsotudosHtmlElement.value // Lekéri a `tudos1` mező értékét.
-    const masodiktudosValue = masodiktudosHtmlElement.value // Lekéri a `tudos2` mező értékét.
+    const nonEmptyTudos = getNonEmptyTudosField(elsotudosHtmlElement, masodiktudosHtmlElement)
 
-    
-    if (simpleValidation(teruletmegnevezeseHtmlElement, idoszakHtmlElement, elsotudosHtmlElement, masodiktudosHtmlElement)) { // Ellenőrzi, hogy a simpleValidation függvény minden feltételt teljesít-e. , Ha a függvény `true` értéket ad vissza, akkor az űrlap értékei érvényesek, és folytatódhat az adatok feldolgozása.
+    if (simpleValidation(teruletmegnevezeseHtmlElement, idoszakHtmlElement, nonEmptyTudos)) { // Ellenőrzi, hogy a simpleValidation függvény minden feltételt teljesít-e. , Ha a függvény `true` értéket ad vissza, akkor az űrlap értékei érvényesek, és folytatódhat az adatok feldolgozása.
+        const teruletmegnevezeseValue = teruletmegnevezeseHtmlElement.value // Lekéri a `fizika` mező értékét.
+        const idoszakValue = idoszakHtmlElement.value // Lekéri az `ido` mező értékét.
+        const elsotudosValue = elsotudosHtmlElement.value === '' ? undefined : elsotudosHtmlElement.value // Lekéri a `tudos1` mező értékét.
+        const masodiktudosValue = masodiktudosHtmlElement.value === '' ? undefined : masodiktudosHtmlElement.value// Lekéri a `tudos2` mező értékét.
         const newElement = { // Létrehoz egy új objektumot az űrlap mezőinek értékeivel.
             field1: teruletmegnevezeseValue, // Az objektum `field1` mezőjéhez az `fizika` mező értéke kerül.
             field2: idoszakValue, // Az objektum `field2` mezőjéhez az `ido` mező értéke kerül.
@@ -140,6 +140,16 @@ form.addEventListener('submit', function (e) { // Hozzáad egy eseménykezelőt,
         urlap.reset(); // Formot alapallálapotba állítja vissza
     }
 })
+
+function getNonEmptyTudosField(elsoTudosField,masodikTudosField){
+    let nonEmptyTudosHtmlElement = elsoTudosField;
+
+    if(elsoTudosField.value === '' && masodikTudosField.value !== ''){
+        nonEmptyTudosHtmlElement = masodikTudosField;
+    }
+    return nonEmptyTudosHtmlElement;
+    
+}
 
 function simpleValidation(teruletHtmlElement, idoszakHtmlElement, elsotudosHtmlElement, masodiktudosHtmlElement) { // Meghatározza a simple validation-t, amely ellenőrzi, hogy a megadott űrlapelemek ki vannak-e töltve, és biztosítja, hogy legalább egy tudós mező értékkel rendelkezzen.
     let valid = true; // A valid változót alapértelmezetten igazra állítjuk, majd később ennek az értékét hamisra módosítjuk, ha hiba történik.
@@ -165,6 +175,8 @@ function simpleValidation(teruletHtmlElement, idoszakHtmlElement, elsotudosHtmlE
     }
     return valid;
 }
+
+
 
 function validateFormHtmlField(inputHtmlElement, errorMessage) { // Definiáljuk a validateFormHtmlField függvényt
     let valid = true; // Definiáljuk a valid lokális változót true értékkel
