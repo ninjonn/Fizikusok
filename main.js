@@ -125,9 +125,26 @@ form.addEventListener('submit', function (e) { // Hozzáad egy eseménykezelőt,
     const elsotudosValue = elsotudosHtmlElement.value // Lekéri a `tudos1` mező értékét.
     const masodiktudosValue = masodiktudosHtmlElement.value // Lekéri a `tudos2` mező értékét.
 
+    
+    if (simpleValidation(teruletmegnevezeseHtmlElement, idoszakHtmlElement, elsotudosHtmlElement, masodiktudosHtmlElement)) { // Ellenőrzi, hogy a simpleValidation függvény minden feltételt teljesít-e. , Ha a függvény `true` értéket ad vissza, akkor az űrlap értékei érvényesek, és folytatódhat az adatok feldolgozása.
+        const newElement = { // Létrehoz egy új objektumot az űrlap mezőinek értékeivel.
+            field1: teruletmegnevezeseValue, // Az objektum `field1` mezőjéhez az `fizika` mező értéke kerül.
+            field2: idoszakValue, // Az objektum `field2` mezőjéhez az `ido` mező értéke kerül.
+            field3: elsotudosValue, // Az objektum `field3` mezőjéhez a `tudos1` mező értéke kerül.
+            field4: masodiktudosValue // Az objektum `field4` mezőjéhez a `tudos2` mező értéke kerül.
+        };
+
+        array.push(newElement); // Hozzáadja az új elemet az array végére
+        table.innerHTML = ''; // Kiüríti a táblázat tartalmát
+        renderTable(); // Frissíti a táblázatot
+        urlap.reset(); // Formot alapallálapotba állítja vissza
+    }
+})
+
+function simpleValidation(teruletHtmlElement, idoszakHtmlElement, elsotudosHtmlElement, masodiktudosHtmlElement) { // Meghatározza a simple validation-t, amely ellenőrzi, hogy a megadott űrlapelemek ki vannak-e töltve, és biztosítja, hogy legalább egy tudós mező értékkel rendelkezzen.
     let valid = true; // A valid változót alapértelmezetten igazra állítjuk, majd később ennek az értékét hamisra módosítjuk, ha hiba történik.
 
-    if(!validateFormHtmlField(teruletmegnevezeseHtmlElement, "A terület kitöltése kötelező")) { // Ellenőrzi, hogy a fizika mező ki van e töltve.
+    if(!validateFormHtmlField(teruletHtmlElement, "A terület kitöltése kötelező")) { // Ellenőrzi, hogy a fizika mező ki van e töltve.
         valid = false;
     }
 
@@ -135,7 +152,7 @@ form.addEventListener('submit', function (e) { // Hozzáad egy eseménykezelőt,
         valid = false;
     }
 
-    if(elsotudosValue === '' && masodiktudosValue === ''){ // Ha egyik tudós mező sem lett kitöltve, hibaüzenetet jelenít meg.
+    if(elsotudosHtmlElement.value === '' && masodiktudosHtmlElement.value === ''){ // Ha egyik tudós mező sem lett kitöltve, hibaüzenetet jelenít meg.
         const errorMessage = 'Legalább egy tudóst meg kell adni';
 
         if(!validateFormHtmlField(elsotudosHtmlElement, errorMessage)){ // Ellenőrzi, hogy az első tudós mező ki van e töltve.
@@ -146,21 +163,8 @@ form.addEventListener('submit', function (e) { // Hozzáad egy eseménykezelőt,
             valid = false;
         }
     }
-
-    if (valid) {
-        const newElement = { // Létrehoz egy új objektumot az űrlap mezőinek értékeivel.
-            field1: teruletmegnevezeseValue, // Az objektum `field1` mezőjéhez az `fizika` mező értéke kerül.
-            field2: idoszakValue, // Az objektum `field2` mezőjéhez az `ido` mező értéke kerül.
-            field3: elsotudosValue, // Az objektum `field3` mezőjéhez a `tudos1` mező értéke kerül.
-            field4: masodiktudosValue // Az objektum `field4` mezőjéhez a `tudos2` mező értéke kerül.
-        }
-
-        array.push(newElement); // Hozzáadja az új elemet az array végére
-        table.innerHTML = ''; // Kiüríti a táblázat tartalmát
-        renderTable(); // Frissíti a táblázatot
-        urlap.reset(); // Formot alapallálapotba állítja vissza
-    }
-})
+    return valid;
+}
 
 function validateFormHtmlField(inputHtmlElement, errorMessage) { // Definiáljuk a validateFormHtmlField függvényt
     let valid = true; // Definiáljuk a valid lokális változót true értékkel
