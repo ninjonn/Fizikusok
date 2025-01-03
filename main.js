@@ -105,8 +105,10 @@ renderTable(); // A renderTable() függvény hívása a rendereléshez.
 
 const form = document.getElementById('form'); // Megkeresi az `form` azonosítójú HTML elemet.
 
+
 form.addEventListener('submit', function (e) { // Hozzáad egy eseménykezelőt, amely a form elküldésekor fut le.
     e.preventDefault(); // Eltávolítja a form default értesítőjét
+
     const teruletmegnevezeseHtmlElement = document.getElementById('fizika') // Megkeresi a `fizika` azonosítójú HTML elemet.
     const idoszakHtmlElement = document.getElementById('ido') // Megkeresi az `ido` azonosítójú HTML elemet.
     const elsotudosHtmlElement = document.getElementById('tudos1') // Megkeresi a `tudos1` azonosítójú HTML elemet.
@@ -125,35 +127,24 @@ form.addEventListener('submit', function (e) { // Hozzáad egy eseménykezelőt,
 
     let valid = true; // A valid változót alapértelmezetten igazra állítjuk, majd később ennek az értékét hamisra módosítjuk, ha hiba történik.
 
-    if (teruletmegnevezeseValue === '') { // Ha a 'fizika' mező üres
-        const szuloElem = teruletmegnevezeseHtmlElement.parentElement; // Elmentjük a mező szülő elemét, amely tartalmazza a hibajelzést.
-        const errorMessage = szuloElem.querySelector('.error-message'); // Megkeressük a szülő elemében azt a HTML elemet, amely az "error-message" osztállyal rendelkezik
-        if (errorMessage != undefined) { // Ha létezik ilyen hibaüzenet elem.
-            errorMessage.innerHTML = 'A terület kitöltése kötelező!'; // Hibaüzenet szövegének beállítása
-        }
-        valid = false; // Beállítjuk, hogy a valid változó hamis, mert a mező üres maradt
+    if(!validateFormHtmlField(teruletmegnevezeseHtmlElement, "A terület kitöltése kötelező")) { // Ellenőrzi, hogy a fizika mező ki van e töltve.
+        valid = false;
     }
 
-    if (idoszakValue === '') { // Ha az 'ido' mező üres
-        const szuloEleme = idoszakHtmlElement.parentElement; // Elmentjük a mező szülő elemét, amely tartalmazza a hibajelzést
-        const hibauzenet = szuloEleme.querySelector('.error-message'); // Megkeressük a szülő elemében azt a HTML elemet, amely az "error-message" osztállyal rendelkezik
-        if (hibauzenet != undefined) { // Ha létezik ilyen hibaüzenet elem.
-            hibauzenet.innerHTML = 'Az időszak kitöltése kötelező!'; // Hibaüzenet szövegének beállítása
-
-        }
-        valid = false; // Beállítjuk, hogy a valid változó hamis, mert a mező üres maradt
+    if(!validateFormHtmlField(idoszakHtmlElement, "Az időszak kitöltése kötelező")) { // Ellenőrzi, hogy az idő mező ki van e töltve.
+        valid = false;
     }
 
-    if (elsotudosValue === '' && masodiktudosValue === '') {
-        const szuloEleme1 = elsotudosHtmlElement.parentElement; // Elmentjük a mező szülő elemét, amely tartalmazza a hibajelzést
-        const szuloEleme2 = masodiktudosHtmlElement.parentElement; // Elmentjük a mező szülő elemét, amely tartalmazza a hibajelzést
-        const error1 = szuloEleme1.querySelector('.error-message'); // A szuloEleme1 elem belsejében keres egy '.error-message' osztályú elemet.
-        const error2 = szuloEleme2.querySelector('.error-message'); // A szuloEleme2 elem belsejében keres egy '.error-message' osztályú elemet.
-        if (error1 != undefined && error2 != undefined) { // Ellenőrzi, hogy mindkét hibaüzenet elem létezik-e
-            error1.innerHTML = 'Legalább egy tudóst meg kell adni!'; // Beállítja az első hibaüzenet elem szövegét
-            error2.innerHTML = 'Legalább egy tudóst meg kell adni!'; // Beállítja a második hibaüzenet elem szövegét
+    if(elsotudosValue === '' && masodiktudosValue === ''){ // Ha egyik tudós mező sem lett kitöltve, hibaüzenetet jelenít meg.
+        const errorMessage = 'Legalább egy tudóst meg kell adni';
+
+        if(!validateFormHtmlField(elsotudosHtmlElement, errorMessage)){ // Ellenőrzi, hogy az első tudós mező ki van e töltve.
+            valid = false;
         }
-        valid = false; // Beállítjuk, hogy a valid változó hamis, mert a mező üres maradt
+
+        if(!validateFormHtmlField(masodiktudosHtmlElement, errorMessage)){ // Ellenőrzi, hogy a második tudós mező ki van e töltve.
+            valid = false;
+        }
     }
 
     if (valid) {
@@ -167,5 +158,19 @@ form.addEventListener('submit', function (e) { // Hozzáad egy eseménykezelőt,
         array.push(newElement); // Hozzáadja az új elemet az array végére
         table.innerHTML = ''; // Kiüríti a táblázat tartalmát
         renderTable(); // Frissíti a táblázatot
+        urlap.reset(); // Formot alapallálapotba állítja vissza
     }
 })
+
+function validateFormHtmlField(inputHtmlElement, errorMessage) { // Definiáljuk a validateFormHtmlField függvényt
+    let valid = true; // Definiáljuk a valid lokális változót true értékkel
+    if(inputHtmlElement.value === ''){ // Ha a paraméterben kapott beviteli mező üres
+        const parentElement = inputHtmlElement.parentElement; // Eltároljuk a mező szülő elemét
+        const errorPlace = parentElement.querySelector('.error-message'); // A szülő elemben megkeressük az "error-message" osztályú elemet
+        if(errorPlace != undefined){ // Ha van hibajelzés
+            errorPlace.innerHTML = errorMessage; // Ha már van ilyen hibaüzenet, akkor cseréljük át.
+        }
+        valid = false; // Ha hiba van, a valid változó értéke hamisra változik.
+    }
+    return valid; // Visszatér a valid változóval.
+}
