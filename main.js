@@ -36,8 +36,21 @@ const array = [
 const table = document.createElement('table'); // Táblázat HTML elem létrehozása
 document.body.appendChild(table); // Hozzáadjuk a táblázatot a dokumentum törzséhez (body)
 
+function generateTableHeader(headerAdat, tableHeader) { // Definiálom a renderTable függvényt és adok neki 2 változót
+    const headerRow = document.createElement('tr'); // Létrehoz egy új táblázatsort a fejléc számára.
+    for(const i in headerAdat){ // Végigmegy a `headerAdat` elemein, hogy minden mezőhöz létrehozzon egy cellát
+        const headerCell = document.createElement('th'); // Létrehoz egy új fejléc cellát
+        headerCell.innerHTML = headerAdat[i]; // A cella belső tartalmát beállítja a `headerAdat` aktuális mezőjére
+        if(i === 'field3'){ // Ha az aktuális mező neve 'field3', akkor a cella szélességét két oszlopnyi méretre állítja.
+            headerCell.colSpan = 2; // Ha a cella a field3 mező, akkor két oszlopot foglaljon el
+        }
+        headerRow.appendChild(headerCell); // Hozzáadja a fejlécsort a fejléc elemhez
+    }
+    tableHeader.appendChild(headerRow); // Hozzáadja a fejlécsort a fejléc elemhez
+}
+
 function renderTable() { // Definiálom a renderTable függvényt
-    table.innerHTML = '';
+    table.innerHTML = ''; // Kiüríti a táblázat tartalmát, hogy újra generálható legyen
 
     const tableHeader = document.createElement('thead'); // Táblázat fejléc elem létrehozása
     table.appendChild(tableHeader); // A fejléc (thead) hozzáadása a táblázathoz (table)
@@ -47,60 +60,46 @@ function renderTable() { // Definiálom a renderTable függvényt
 
     let headerKeszVan = false; // Változó aminek értékét előszőr false-ra állítjuk, hogyha létrehoztuk a header true lesz, hogy a header csak egyszer jöjjön létre
 
-    for (const currentElement of array) { // Végigiterálok az array elemein
-        if (!headerKeszVan) { // Ha még nincs fejléc, akkor létrehozom
-            const headerRow = document.createElement('tr'); // Létrehoz egy új fejlécsort.
-
-            const headerCell1 = document.createElement('th'); // Létrehoz egy új fejléc cellát az első oszlophoz
-            headerCell1.innerHTML = currentElement.field1; // A cella tartalma az első mező
-            headerRow.appendChild(headerCell1); // Hozzáfűzi a fejlécsorhoz
-
-            const headerCell2 = document.createElement('th'); // Létrehoz egy új fejléc cellát a második oszlophoz
-            headerCell2.innerHTML = currentElement.field2; // A cella tartalma a második mező
-            headerRow.appendChild(headerCell2); // Hozzáfűzi a fejlécsorhoz
-
-            const headerCell3 = document.createElement('th'); // Létrehoz egy új fejléc cellát a harmadik oszlophoz
-            headerCell3.innerHTML = currentElement.field3; // A cella tartalma a harmadik mező
-            headerCell3.colSpan = 2; // Beállítja, hogy a cella két oszlopot foglaljon el
-            headerRow.appendChild(headerCell3); // Hozzáfűzi a fejlécsorhoz
-
-            tableHeader.appendChild(headerRow); // Hozzáadja a fejlécsort a táblázathoz.
-            headerKeszVan = true; // Jelzi, hogy a fejléc már létrejött
-            continue; // Továbblép a következő iterációra, mert létrehoztuk a fejlécet
+    for(const currentElement of array) { // Végigmegy az `array` elemein.
+        if(!headerKeszVan) { // Ha a fejléc még nem készült el
+            generateTableHeader(currentElement, tableHeader);  // Generálja a fejlécet az aktuális elem adatai alapján.
+            headerKeszVan = true; // A fejléc elkészült, így a későbbiekben nem generálunk ujra
+            continue; // Végeztük a fejlécek generálását, folytassuk tovább a ciklusban
         }
 
         const row = document.createElement('tr'); // Létrehoz egy új táblázatsort (<tr> elemet).
         tableBody.appendChild(row); // Hozzáadja az új sort a táblázat törzséhez (tbody).
 
-        const rowterulet = document.createElement('td'); // Létrehoz egy új cellát (<td>) az aktuális sor "field1" adatának tárolására.
-        rowterulet.innerHTML = currentElement.field1; // Beállítja a cella tartalmát az aktuális objektum "field1" mezőjére.
-        row.appendChild(rowterulet); // Hozzáadja a cellát az aktuális táblázatsorhoz.
+        const field1Cell = document.createElement('td');  // Új cella létrehozása az `field1` mezőhöz.
+        field1Cell.innerHTML = currentElement.field1 || ''; // Beállítja a cella tartalmát az aktuális objektum "field1" mezőjére.
+        row.appendChild(field1Cell); // Hozzáadja a cellát a sorhoz
 
-        const rowidoszak = document.createElement('td'); // Létrehoz egy új cellát (<td>) az aktuális sor "field2" adatának tárolására.
-        rowidoszak.innerHTML = currentElement.field2; // Beállítja a cella tartalmát az aktuális objektum "field2" mezőjére.
-        row.appendChild(rowidoszak); // Hozzáadja a cellát az aktuális táblázatsorhoz.
+        const field2Cell = document.createElement('td'); // Új cella létrehozása az `field2` mezőhöz.
+        field2Cell.innerHTML = currentElement.field2 || ''; // Beállítja a cella tartalmát az aktuális objektum "field2" mezőjére.
+        row.appendChild(field2Cell); // Hozzáadja a cellát a sorhoz
 
-        if (currentElement.field3 && !currentElement.field4) { // Ellenőrzi, hogy az aktuális objektumnak van-e "field3" értéke, de nincs "field4" értéke.
-            const rowkepviselok1 = document.createElement('td'); // Létrehoz egy új cellát (<td>) az aktuális sor "field3" adatának tárolására.
-            rowkepviselok1.innerHTML = currentElement.field3; // Beállítja a cella tartalmát az aktuális objektum "field3" mezőjére.
-            rowkepviselok1.colSpan = 2; // Ha nincs "field4", az első "Képviselők" cella két oszlopot foglal el.
-            row.appendChild(rowkepviselok1); // Hozzáadja a cellát az aktuális táblázatsorhoz.
-        } else if (!currentElement.field3 && currentElement.field4) { // Ellenőrzi, hogy az aktuális objektumnak van-e "field4" értéke, de nincs "field3" értéke.
-            const rowkepviselok2 = document.createElement('td'); // Létrehoz egy új cellát (<td>) az aktuális sor "field4" adatának tárolására.
-            rowkepviselok2.innerHTML = currentElement.field4; // Beállítja a cella tartalmát az aktuális objektum "field4" mezőjére.
-            rowkepviselok2.colSpan = 2; // Ha nincs "field3", a második "Képviselők" cella két oszlopot foglal el.
-            row.appendChild(rowkepviselok2); // Hozzáadja a cellát az aktuális táblázatsorhoz.
-        } else if (currentElement.field3 && currentElement.field4) { // Ellenőrzi, hogy az aktuális objektumnak van "field3" és "field4" értéke is.
-            const rowkepviselok1 = document.createElement('td'); // Létrehoz egy új cellát (<td>) az aktuális sor "field3" adatának tárolására.
-            rowkepviselok1.innerHTML = currentElement.field3; // Beállítja a cella tartalmát az aktuális objektum "field3" mezőjére.
-            row.appendChild(rowkepviselok1) // Hozzáadja a cellát az aktuális táblázatsorhoz.
+        if(currentElement.field3 && !currentElement.field4){ // Ha az `field3` mező létezik, de az `field4` nem
+            const field3Cell = document.createElement('td'); // Új cella létrehozása az `field3` mezőhöz
+            field3Cell.innerHTML = currentElement.field3; // Beállítja a cella tartalmát az aktuális objektum "field3" mezőjére.
+            field3Cell.colSpan = 2; // A cella két oszlopot foglal el
+            row.appendChild(field3Cell); // Hozzáadja a cellát a sorhoz
+        }else if(!currentElement.field3 && currentElement.field4){  // Ha az `field4` mező létezik, de az `field3` nem
+            const field4Cell = document.createElement('td'); // Új cella létrehozása az `field4` mezőhöz
+            field4Cell.innerHTML = currentElement.field4; // Beállítja a cella tartalmát az aktuális objektum "field4" mezőjére.
+            field4Cell.colSpan = 2; // A cella két oszlopot foglal el
+            row.appendChild(field4Cell); // Hozzáadja a cellát a sorhoz
+        }else if(currentElement.field3 && currentElement.field4){ // Ha mind az `field3`, mind az `field4` mezők léteznek
+            const field3Cell = document.createElement('td');  // Új cella létrehozása az `field3` mezőhöz
+            field3Cell.innerHTML = currentElement.field3; // Beállítja a cella tartalmát az aktuális objektum "field3" mezőjére.
+            row.appendChild(field3Cell); // Hozzáadja a cellát a sorhoz
 
-            const rowkepviselok2 = document.createElement('td'); // Létrehoz egy új cellát (<td>) az aktuális sor "field4" adatának tárolására.
-            rowkepviselok2.innerHTML = currentElement.field4; // Beállítja a cella tartalmát az aktuális objektum "field4" mezőjére.
-            row.appendChild(rowkepviselok2) // Hozzáadja a cellát az aktuális táblázatsorhoz.
+            const field4Cell = document.createElement('td'); // Új cella létrehozása az `field4` mezőhöz.
+            field4Cell.innerHTML = currentElement.field4; // Beállítja a cella tartalmát az aktuális objektum "field4" mezőjére.
+            row.appendChild(field4Cell); // Hozzáadja a cellát a sorhoz
         }
     }
 }
+
 renderTable(); // A renderTable() függvény hívása a rendereléshez.
 
 const form = document.getElementById('form'); // Megkeresi az `form` azonosítójú HTML elemet.
