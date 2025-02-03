@@ -49,7 +49,7 @@ function generateTableHeader(headerAdat, tableHeader) { // Definiálom a renderT
     tableHeader.appendChild(headerRow); // Hozzáadja a fejlécsort a fejléc elemhez
 }
 
-function renderTable() { // Definiálom a renderTable függvényt
+function renderTable(data) { // Definiálom a renderTable függvényt
     table.innerHTML = ''; // Kiüríti a táblázat tartalmát, hogy újra generálható legyen
 
     const tableHeader = document.createElement('thead'); // Táblázat fejléc elem létrehozása
@@ -60,7 +60,7 @@ function renderTable() { // Definiálom a renderTable függvényt
 
     let headerKeszVan = false; // Változó aminek értékét előszőr false-ra állítjuk, hogyha létrehoztuk a header true lesz, hogy a header csak egyszer jöjjön létre
 
-    for(const currentElement of array) { // Végigmegy az `array` elemein.
+    for(const currentElement of data) { // mostantól a rendertable függvény bemeneti paraméterként kapja meg a táblázat adatait, és ezen iterál végig. ÍGy a globális array helyett az aktuálisan átadott adatok alapján generáljuk a táblázatot
         if(!headerKeszVan) { // Ha a fejléc még nem készült el
             generateTableHeader(currentElement, tableHeader);  // Generálja a fejlécet az aktuális elem adatai alapján.
             headerKeszVan = true; // A fejléc elkészült, így a későbbiekben nem generálunk ujra
@@ -100,7 +100,7 @@ function renderTable() { // Definiálom a renderTable függvényt
     }
 }
 
-renderTable(); // A renderTable() függvény hívása a rendereléshez.
+renderTable(array); // Az inicializáláskor most a globális array-t adjuk át a renderTable függvénynek.
 
 const form = document.getElementById('form'); // Megkeresi az `form` azonosítójú HTML elemet.
 
@@ -137,7 +137,7 @@ form.addEventListener('submit', function (e) { // Hozzáad egy eseménykezelőt,
         };
         array.push(newElement); // Hozzáadja az új elemet az array végére
         table.innerHTML = ''; // Kiüríti a táblázat tartalmát
-        renderTable(); // Frissíti a táblázatot
+        renderTable(array); // Frissíti a táblázatot
         urlap.reset(); // Formot alapallálapotba állítja vissza
     }
 })
