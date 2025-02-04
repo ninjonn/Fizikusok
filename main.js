@@ -1,4 +1,7 @@
-
+    /**
+     * Létrehoz egy dinamikus űrlapot a tudományterületek és tudósok hozzáadásához
+     * @returns {HTMLFormElement} A létrehozott HTML űrlapelem
+     */
     function generateForm() {
         const form = document.createElement('form'); // Létrehoz egy új form elemet
         form.id = 'form'; // Beállítja az űrlap azonosítóját form-ra
@@ -86,6 +89,11 @@
     const table = document.createElement('table'); // Táblázat HTML elem létrehozása
     document.body.appendChild(table); // Hozzáadjuk a táblázatot a dokumentum törzséhez (body)
 
+    /**
+     * Létrehoz egy táblázat fejlécét a megadott adatok alapján
+     * @param {Object} headerAdat Az objektum, amely a fejléc cellák tartalmát tartalmazza
+     * @param {HTMLElement} tableHeader A táblázat fejléc eleme
+     */
     function generateTableHeader(headerAdat, tableHeader) { // Definiálom a renderTable függvényt és adok neki 2 változót
         const headerRow = document.createElement('tr'); // Létrehoz egy új táblázatsort a fejléc számára.
         for (const i in headerAdat) { // Végigmegy a `headerAdat` elemein, hogy minden mezőhöz létrehozzon egy cellát
@@ -99,6 +107,10 @@
         tableHeader.appendChild(headerRow); // Hozzáadja a fejlécsort a fejléc elemhez
     }
 
+    /**
+     * Kirendereli a táblázatot az adatok alapján
+     * @param {Array<Object>} data A megjelenítendő adatokat tartalmazó objektumtömb 
+     */
     function renderTable(data) { // Definiálom a renderTable függvényt
         table.innerHTML = ''; // Kiüríti a táblázat tartalmát, hogy újra generálható legyen
 
@@ -191,6 +203,12 @@
         }
     })
     
+    /**
+     * ellenőrzi, hogy a terület és időszak mezők ki vannak-e töltve
+     * @param {HTMLElement} teruletHtmlElement A terület beviteli mező HTML eleme
+     * @param {HTMLElement} idoszakHtmlElement Az időszak beviteli mező HTML eleme
+     * @returns {boolean} True, ha a validáció sikeres, különben false
+     */
     function simpleValidation(teruletHtmlElement, idoszakHtmlElement) { // Simple validációs függvény, amely ellenőrzi, hogy ki van e töltve a terület és idő field
         let valid = true; // A valid változót alapértelmezetten igazra állítjuk, majd később ennek az értékét hamisra módosítjuk, ha hiba történik.
 
@@ -205,6 +223,12 @@
 
     }
 
+    /**
+     * ellenőrzi, hogy legalább egy tudós mező ki van-e töltve
+     * @param {HTMLElement} elsotudosHtmlElement Az első tudós beviteli mező HTML eleme
+     * @param {HTMLElement} masodiktudosHtmlElement A második tudós beviteli mező HTML eleme
+     * @returns {boolean} True, ha legalább egy mező ki van töltve, különben false
+     */
     function complexValidation(elsotudosHtmlElement, masodiktudosHtmlElement) { // Komplex validációs függvény, amely ellenőrzi, hogy legalább az egyik tudós mező ki van-e töltve.
         let valid = true; // A valid változót alapértelmezetten igazra állítjuk, majd később ennek az értékét hamisra módosítjuk, ha hiba történik.
 
@@ -222,6 +246,12 @@
         return valid; // Visszaadja a validáció eredményét.
     }
 
+    /**
+     * üres mező esetén hibaüzenetet jelenít meg
+     * @param {HTMLElement} inputHtmlElement A beviteli mező HTML eleme
+     * @param {string} errorMessage A megjelenítendő hibaüzenet
+     * @returns {boolean} True, ha a mező ki van töltve, különben false
+     */
     function validateFormHtmlField(inputHtmlElement, errorMessage) { // Definiáljuk a validateFormHtmlField függvényt
         let valid = true; // Definiáljuk a valid lokális változót true értékkel
         if (inputHtmlElement.value === '') { // Ha a paraméterben kapott beviteli mező üres
