@@ -1,8 +1,8 @@
-document.addEventListener('DOMContentLoaded', function () {
 
     function generateForm() {
         const form = document.createElement('form');
         form.id = 'form';
+        form.action = '#';
 
         const fields = [
             { label: 'Terület megnevezése', id: 'fizika', type: 'text' },
@@ -20,21 +20,25 @@ document.addEventListener('DOMContentLoaded', function () {
             label.innerText = field.label;
             div.appendChild(label);
 
+            div.appendChild(document.createElement('br'));
+
             const input = document.createElement('input');
             input.type = field.type;
             input.id = field.id;
             input.name = field.id;
             div.appendChild(input);
 
-            const errorSpan = document.createElement('span');
-            errorSpan.className = 'error-message';
-            div.appendChild(errorSpan);
+            div.appendChild(document.createElement('br'));
+            div.appendChild(document.createElement('br'));
+
+            const errorDiv = document.createElement('div');
+            errorDiv.className = 'error-message';
+            div.appendChild(errorDiv);
 
             form.appendChild(div);
         }
 
         const submit = document.createElement('button');
-        submit.type = 'submit';
         submit.innerText = 'Hozzáadás';
         form.appendChild(submit);
 
@@ -151,21 +155,19 @@ document.addEventListener('DOMContentLoaded', function () {
 
     renderTable(array); // Az inicializáláskor most a globális array-t adjuk át a renderTable függvénynek.
 
-    const form = document.getElementById('form'); // Megkeresi az `form` azonosítójú HTML elemet.
-
-
     formElement.addEventListener('submit', function (e) { // Hozzáad egy eseménykezelőt, amely a form elküldésekor fut le.
         e.preventDefault(); // Eltávolítja a form default értesítőjét
 
+        const formErrors = e.currentTarget.querySelectorAll('.error-message');
+        for (const error of formErrors) { // Végigiterálunk az összes talált error-message elemen.
+            error.textContent = ''; // Töröljük a hibák szövegét, hogy ne jelenjenek meg korábbi hibák.
+        }
+        
         const teruletmegnevezeseHtmlElement = document.getElementById('fizika') // Megkeresi a `fizika` azonosítójú HTML elemet.
         const idoszakHtmlElement = document.getElementById('ido') // Megkeresi az `ido` azonosítójú HTML elemet.
         const elsotudosHtmlElement = document.getElementById('tudos1') // Megkeresi a `tudos1` azonosítójú HTML elemet.
         const masodiktudosHtmlElement = document.getElementById('tudos2') // Megkeresi a `tudos2` azonosítójú HTML elemet.
 
-        const formErrors = e.currentTarget.querySelectorAll('.error-message');
-        for (const error of formErrors) { // Végigiterálunk az összes talált error-message elemen.
-            error.innerHTML = ''; // Töröljük a hibák szövegét, hogy ne jelenjenek meg korábbi hibák.
-        }
 
         const teruletmegnevezeseValue = teruletmegnevezeseHtmlElement.value // Lekéri a `fizika` mező értékét.
         const idoszakValue = idoszakHtmlElement.value // Lekéri az `ido` mező értékét.
@@ -225,11 +227,11 @@ document.addEventListener('DOMContentLoaded', function () {
         if (inputHtmlElement.value === '') { // Ha a paraméterben kapott beviteli mező üres
             const parentElement = inputHtmlElement.parentElement; // Eltároljuk a mező szülő elemét
             const errorPlace = parentElement.querySelector('.error-message'); // A szülő elemben megkeressük az "error-message" osztályú elemet
-            if (errorPlace != undefined) { // Ha van hibajelzés
-                errorPlace.innerHTML = errorMessage; // Ha már van ilyen hibaüzenet, akkor cseréljük át.
+            if (errorPlace) { // Ha van hibajelzés
+                errorPlace.textContent = errorMessage; // Ha már van ilyen hibaüzenet, akkor cseréljük át.
+                errorPlace.style.color = 'red'; //
             }
             valid = false; // Ha hiba van, a valid változó értéke hamisra változik.
         }
         return valid; // Visszatér a valid változóval.
     }
-});
