@@ -1,52 +1,52 @@
 
     function generateForm() {
-        const form = document.createElement('form');
-        form.id = 'form';
-        form.action = '#';
+        const form = document.createElement('form'); // Létrehoz egy új form elemet
+        form.id = 'form'; // Beállítja az űrlap azonosítóját form-ra
+        form.action = '#'; // Beállítja az űrlap action attribútumát üres hivatkozásra
 
-        const fields = [
+        const fields = [ // Létrehoz egy tömböt az űrlap mezőinek adataival
             { label: 'Terület megnevezése', id: 'fizika', type: 'text' },
             { label: 'Időszak', id: 'ido', type: 'text' },
             { label: 'Első tudós', id: 'tudos1', type: 'text' },
             { label: 'Második tudós', id: 'tudos2', type: 'text' }
         ];
 
-        for (let i = 0; i < fields.length; i++) {
-            const field = fields[i];
-            const div = document.createElement('div');
+        for (let i = 0; i < fields.length; i++) { // Végigiterál a tömb elemein és létrehozza az input mezőket
+            const field = fields[i]; // Az aktuális mező objektum
+            const div = document.createElement('div'); // Létrehoz egy div elemet a mező számára
 
-            const label = document.createElement('label');
-            label.htmlFor = field.id;
-            label.innerText = field.label;
-            div.appendChild(label);
+            const label = document.createElement('label'); // Létrehoz egy címkét label az input mezőhöz
+            label.htmlFor = field.id; // Összeköti a címkét az input mezővel
+            label.innerText = field.label; // Beállítja a címke szövegét
+            div.appendChild(label); // Hozzáadja a címkét a div-hez
 
-            div.appendChild(document.createElement('br'));
+            div.appendChild(document.createElement('br')); // Sor törés az elrendezéshez
 
-            const input = document.createElement('input');
-            input.type = field.type;
-            input.id = field.id;
-            input.name = field.id;
-            div.appendChild(input);
+            const input = document.createElement('input'); // Létrehoz egy input mezőt
+            input.type = field.type; // Beállítja az input típusát
+            input.id = field.id; // Beállítja az input azonosítóját
+            input.name = field.id; // Beállítja az input nevét
+            div.appendChild(input); // Hozzáadja az input mezőt a div-hez
 
-            div.appendChild(document.createElement('br'));
-            div.appendChild(document.createElement('br'));
+            div.appendChild(document.createElement('br')); // Sor törés az elrendezéshez
+            div.appendChild(document.createElement('br')); // Sor törés az elrendezéshez
 
-            const errorDiv = document.createElement('div');
-            errorDiv.className = 'error-message';
-            div.appendChild(errorDiv);
+            const errorDiv = document.createElement('div'); // Létrehoz egy hibaüzenet megjelenítésére szolgáló div-et
+            errorDiv.className = 'error-message'; // Hozzáad egy osztályt a div-hez
+            div.appendChild(errorDiv); // Hozzáadja a hibaüzenet div-et a mező div-jéhez
 
-            form.appendChild(div);
+            form.appendChild(div); // Hozzáadja az elkészült mező div-et az űrlaphoz
         }
 
-        const submit = document.createElement('button');
-        submit.innerText = 'Hozzáadás';
-        form.appendChild(submit);
+        const submit = document.createElement('button'); // Létrehoz egy "Hozzáadás" gombot
+        submit.innerText = 'Hozzáadás'; // Beállítja a gomb szövegét
+        form.appendChild(submit); // Hozzáadja a gombot az űrlaphoz
 
-        document.body.appendChild(form);
-        return form;
+        document.body.appendChild(form); // Hozzáadja az űrlapot a dokumentum törzséhez
+        return form; // Visszatér az elkészült űrlappal
     }
 
-    const formElement = generateForm()
+    const formElement = generateForm(); // Meghívja a generateForm függvényt és eltárolja az eredményt a formElement változóban
 
     const array = [
         { // Az első objektum a táblázat fejlécének adatait tartalmazza
