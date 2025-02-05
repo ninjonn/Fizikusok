@@ -70,8 +70,9 @@ function generateTableHeader(headerAdat, tableHeader) { // Definiálom a renderT
 /**
      * Kirendereli a táblázatot az adatok alapján
      * @param {Array<Object>} data A megjelenítendő adatokat tartalmazó objektumtömb 
+     * @param {HTMLElement} table A táblázat HTML eleme, amelybe renderelünk
      */
-function renderTable(data) { // Definiálom a renderTable függvényt
+function renderTable(data, table) { // Definiálom a renderTable függvényt
     table.innerHTML = ''; // Kiüríti a táblázat tartalmát, hogy újra generálható legyen
 
     const tableHeader = document.createElement('thead'); // Táblázat fejléc elem létrehozása

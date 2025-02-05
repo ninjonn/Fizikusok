@@ -38,7 +38,7 @@ const array = [
 const table = document.createElement('table'); // Táblázat HTML elem létrehozása
 document.body.appendChild(table); // Hozzáadjuk a táblázatot a dokumentum törzséhez (body)
 
-renderTable(array); // Az inicializáláskor most a globális array-t adjuk át a renderTable függvénynek.
+renderTable(array, table); // Az inicializáláskor most a globális array-t adjuk át a renderTable függvénynek.
 
 formElement.addEventListener('submit', function (e) { // Hozzáad egy eseménykezelőt, amely a form elküldésekor fut le.
     e.preventDefault(); // Eltávolítja a form default értesítőjét
@@ -71,7 +71,7 @@ formElement.addEventListener('submit', function (e) { // Hozzáad egy eseményke
             field4: masodiktudosValue // Az objektum `field4` mezőjéhez a `tudos2` mező értéke kerül.
         };
         array.push(newElement); // Hozzáadja az új elemet az array végére
-        renderTable(array); // Frissíti a táblázatot
+        renderTable(array,table); // Frissíti a táblázatot
         e.currentTarget.reset(); // Formot alapallálapotba állítja vissza
     }
 })
